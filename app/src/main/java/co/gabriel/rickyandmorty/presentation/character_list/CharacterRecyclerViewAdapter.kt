@@ -1,5 +1,6 @@
 package co.gabriel.rickyandmorty.presentation.character_list
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Button
@@ -51,10 +52,14 @@ class CharacterRecyclerViewAdapter(private var characters: List<Character>, priv
 
     private fun updateTotal(){
         var total = 0
-        characters.forEach { character ->
-            total += character.quantity * 12000
-        }
 
+        characters.forEach { character ->
+            total += when(character.status) {
+                "Alive" -> character.quantity * 14400
+                "Dead" -> character.quantity * 9600
+                else -> character.quantity * 12000
+            }
+        }
         tvTotalPrice.text =  "\$$total"
     }
 
@@ -62,10 +67,15 @@ class CharacterRecyclerViewAdapter(private var characters: List<Character>, priv
         val character = characters[position]
         holder.quantity.text = character.quantity.toString()
         val currentPrice = (12000 * character.quantity)
-        holder.price.text = currentPrice.toString()
+        var totalBalance = 0
+        totalBalance = when(characters[position].status) {
+            "Alive" -> ((currentPrice * 1.20).toInt())
+            "Dead" -> (currentPrice - (currentPrice * 0.20)).toInt()
+            else -> currentPrice
+        }
+        holder.price.text = totalBalance.toString()
         updateTotal()
     }
-
 
     inner class ViewHolder(binding: CharacterItemBinding) : RecyclerView.ViewHolder(binding.root) {
         val image: ImageView = binding.characterImage

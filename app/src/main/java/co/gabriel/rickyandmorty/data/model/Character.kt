@@ -9,7 +9,9 @@ data class Character(
     @SerializedName("name")
     val name: String,
     @SerializedName("image")
-    val image: String
+    val image: String,
+    @SerializedName("status")
+    val status: String
 )
 
 data class Info(
