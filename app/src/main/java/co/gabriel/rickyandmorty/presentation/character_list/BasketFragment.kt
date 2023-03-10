@@ -1,15 +1,14 @@
 package co.gabriel.rickyandmorty.presentation.character_list
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.Toast
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import co.gabriel.rickyandmorty.R
 import co.gabriel.rickyandmorty.core.provideCharacterRepository
@@ -18,38 +17,36 @@ import co.gabriel.rickyandmorty.databinding.CharacterListFragmentBinding
 import co.gabriel.rickyandmorty.presentation.ScreenState
 import com.google.android.material.snackbar.Snackbar
 
-class CharacterListFragment : Fragment() {
-
+class BasketFragment : Fragment() {
 
     private lateinit var viewModel: CharacterListViewModel
 
     private var _binding: CharacterListFragmentBinding? = null
     private val binding get() = _binding!!
     private lateinit var characterAdapter: CharacterRecyclerViewAdapter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = CharacterListFragmentBinding.inflate(inflater, container, false)
-        return binding.root
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_basket, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         context?.apply {
 
-            val btnDtls = view.findViewById<Button>(R.id.buttonDetails)
-            btnDtls.setOnClickListener {
-                val fragmentBasket: BasketFragment = FragmentManager.findFragment(view.rootView)
-                fragmentBasket.enterTransition
-            }
-
             val factory =
                 CharacterListViewModelFactory(
                     characterRepository = provideCharacterRepository(),
                 )
             viewModel = ViewModelProvider(
-                owner = this@CharacterListFragment,
+                owner = this@BasketFragment,
                 factory = factory
             )[CharacterListViewModel::class.java]
             viewModel.findCharacters().observe(viewLifecycleOwner, Observer(::renderState))
@@ -64,7 +61,6 @@ class CharacterListFragment : Fragment() {
         }
 
     }
-
     private fun renderState(screenState: ScreenState<Any>) {
 
         when (screenState) {
@@ -74,7 +70,6 @@ class CharacterListFragment : Fragment() {
         }
 
     }
-
     private fun showLoading() {
         Snackbar.make(this.requireView(),"Loading..", Snackbar.LENGTH_LONG).show()
 
@@ -82,7 +77,7 @@ class CharacterListFragment : Fragment() {
 
     private fun showError(message: String?) {
         if (message != null) {
-            Snackbar.make(this.requireView(),message,Snackbar.LENGTH_LONG).show()
+            Snackbar.make(this.requireView(),message, Snackbar.LENGTH_LONG).show()
         }
     }
 

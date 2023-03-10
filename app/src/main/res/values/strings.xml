@@ -9,5 +9,7 @@
     <string name="tv_quantity_text">Quantity</string>
     <string name="tv_dollar_sign">$</string>
     <string name="tv_base_price">12.000</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
